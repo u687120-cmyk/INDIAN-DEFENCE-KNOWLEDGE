@@ -1,0 +1,1420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Indian Defence Knowledge Portal</title>
+  <style>
+    :root {
+      --ink: #f6f1e7;
+      --muted: #c8bfa9;
+      --dim: #918a7a;
+      --line: rgba(241, 211, 128, 0.22);
+      --line-strong: rgba(241, 211, 128, 0.44);
+      --panel: rgba(14, 18, 19, 0.74);
+      --panel-soft: rgba(255, 255, 255, 0.045);
+      --gold: #d7ad37;
+      --gold-bright: #ffcf5b;
+      --army: #1b2414;
+      --air: #0a2032;
+      --navy: #071d2d;
+      --missile: #21150f;
+      --study: #181b23;
+      --upload: #111f1b;
+      --danger: #b84b4b;
+      --ok: #61c78f;
+      --radius: 8px;
+      --shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      color: var(--ink);
+      font-family: Georgia, "Times New Roman", serif;
+      background:
+        linear-gradient(135deg, rgba(0,0,0,0.35), rgba(0,0,0,0.2)),
+        radial-gradient(circle at 20% 10%, rgba(215,173,55,0.18), transparent 30%),
+        linear-gradient(160deg, #10170d, #111819 48%, #09121b);
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px);
+      background-size: 58px 58px;
+      mask-image: linear-gradient(to bottom, black, transparent 92%);
+    }
+
+    button, input, select, textarea {
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+      color: inherit;
+      cursor: pointer;
+    }
+
+    a { color: var(--gold-bright); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .shell {
+      width: min(1440px, 100%);
+      margin: 0 auto;
+      padding: 28px clamp(14px, 2vw, 28px) 64px;
+    }
+
+    .hero {
+      min-height: 74vh;
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 34px;
+      align-items: end;
+      padding: clamp(36px, 6vw, 76px) 0 28px;
+    }
+
+    .seal {
+      width: 104px;
+      height: 104px;
+      border: 1px solid var(--line-strong);
+      display: grid;
+      place-items: center;
+      background: rgba(215, 173, 55, 0.06);
+      box-shadow: 0 0 45px rgba(215, 173, 55, 0.13);
+      margin-bottom: 22px;
+    }
+
+    .seal svg { width: 74px; height: 74px; }
+
+    .eyebrow {
+      font-family: "Courier New", monospace;
+      color: var(--gold);
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.28em;
+      margin-bottom: 14px;
+    }
+
+    h1 {
+      font-size: clamp(2.4rem, 7vw, 6.2rem);
+      line-height: 0.95;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--gold-bright);
+      text-shadow: 0 0 50px rgba(255, 207, 91, 0.24);
+      max-width: 980px;
+    }
+
+    .lead {
+      margin-top: 22px;
+      color: var(--muted);
+      font-size: clamp(1.05rem, 1.7vw, 1.32rem);
+      line-height: 1.72;
+      max-width: 820px;
+      font-weight: 300;
+    }
+
+    .hero-panel {
+      border: 1px solid var(--line);
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.07), rgba(255,255,255,0.02)),
+        rgba(0,0,0,0.24);
+      padding: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero-panel h2 {
+      font-size: 0.78rem;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 16px;
+      font-family: "Courier New", monospace;
+    }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .stat {
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(0,0,0,0.28);
+      padding: 16px;
+      min-height: 106px;
+    }
+
+    .stat strong {
+      display: block;
+      color: var(--gold-bright);
+      font-family: "Courier New", monospace;
+      font-size: clamp(1.45rem, 3vw, 2.35rem);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+    }
+
+    .stat span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.82rem;
+      line-height: 1.38;
+      margin-top: 6px;
+    }
+
+    .top-note {
+      margin-top: 18px;
+      color: var(--dim);
+      font-family: "Courier New", monospace;
+      font-size: 0.67rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      line-height: 1.6;
+    }
+
+    .nav-wrap {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      margin: 0 calc(clamp(14px, 2vw, 28px) * -1);
+      padding: 10px clamp(14px, 2vw, 28px);
+      backdrop-filter: blur(18px);
+      background: rgba(5, 8, 8, 0.82);
+      border-block: 1px solid rgba(255,255,255,0.08);
+    }
+
+    nav {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .tab-btn {
+      min-height: 38px;
+      padding: 10px 14px;
+      border: 1px solid rgba(215,173,55,0.22);
+      background: rgba(255,255,255,0.035);
+      color: var(--muted);
+      font-family: "Courier New", monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      transition: 0.2s ease;
+    }
+
+    .tab-btn:hover,
+    .tab-btn.active {
+      color: var(--gold-bright);
+      border-color: var(--gold);
+      background: rgba(215,173,55,0.12);
+    }
+
+    .section {
+      display: none;
+      min-height: 78vh;
+      margin-top: 28px;
+      padding: clamp(22px, 4vw, 44px);
+      border: 1px solid rgba(255,255,255,0.08);
+      background:
+        linear-gradient(160deg, rgba(0,0,0,0.58), rgba(0,0,0,0.28)),
+        var(--page-bg);
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+      animation: pageIn 0.35s ease both;
+    }
+
+    .section::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 80% 0%, rgba(255,255,255,0.09), transparent 30%),
+        repeating-linear-gradient(135deg, transparent 0 18px, rgba(255,255,255,0.017) 18px 19px);
+    }
+
+    .section.active { display: block; }
+
+    @keyframes pageIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .overview-bg { --page-bg: linear-gradient(135deg, #182111, #102022 52%, #091723); }
+    .army-bg { --page-bg: radial-gradient(circle at 85% 10%, rgba(111,126,48,0.28), transparent 34%), linear-gradient(135deg, #1b2414, #11180d); }
+    .air-bg { --page-bg: radial-gradient(circle at 82% 12%, rgba(74,145,196,0.28), transparent 32%), linear-gradient(135deg, #092139, #071018); }
+    .navy-bg { --page-bg: radial-gradient(circle at 88% 8%, rgba(45,162,177,0.24), transparent 35%), linear-gradient(135deg, #061927, #09121e); }
+    .missile-bg { --page-bg: radial-gradient(circle at 86% 10%, rgba(180,62,42,0.28), transparent 34%), linear-gradient(135deg, #22120d, #120d0b); }
+    .equipment-bg { --page-bg: radial-gradient(circle at 88% 10%, rgba(154,134,94,0.28), transparent 34%), linear-gradient(135deg, #171514, #0f1614); }
+    .space-bg { --page-bg: radial-gradient(circle at 80% 8%, rgba(112,86,199,0.26), transparent 33%), linear-gradient(135deg, #11162b, #06131a); }
+    .join-bg { --page-bg: radial-gradient(circle at 84% 12%, rgba(95,188,129,0.22), transparent 32%), linear-gradient(135deg, #102018, #101413); }
+    .exam-bg { --page-bg: radial-gradient(circle at 84% 12%, rgba(225,187,74,0.22), transparent 32%), linear-gradient(135deg, #1c1b22, #111218); }
+    .upload-bg { --page-bg: radial-gradient(circle at 86% 10%, rgba(58,205,177,0.19), transparent 34%), linear-gradient(135deg, #0d221d, #101515); }
+
+    .section-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 20px;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 18px;
+      margin-bottom: 26px;
+    }
+
+    .section-title {
+      font-size: clamp(1.55rem, 3vw, 2.7rem);
+      color: var(--gold-bright);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      line-height: 1;
+    }
+
+    .section-kicker {
+      color: var(--gold);
+      font-family: "Courier New", monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.26em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .section-copy {
+      color: var(--muted);
+      line-height: 1.72;
+      max-width: 840px;
+      font-size: 1rem;
+      font-weight: 300;
+    }
+
+    .tools {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      margin: 20px 0 24px;
+    }
+
+    .input,
+    .select,
+    textarea {
+      border: 1px solid rgba(255,255,255,0.13);
+      background: rgba(0,0,0,0.28);
+      color: var(--ink);
+      padding: 11px 12px;
+      min-height: 42px;
+      outline: none;
+      border-radius: 0;
+    }
+
+    .input { min-width: min(320px, 100%); }
+    .select { min-width: 170px; }
+
+    .input:focus,
+    .select:focus,
+    textarea:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(215,173,55,0.12);
+    }
+
+    .action {
+      min-height: 42px;
+      padding: 10px 16px;
+      border: 1px solid var(--line-strong);
+      background: rgba(215,173,55,0.14);
+      color: var(--gold-bright);
+      font-family: "Courier New", monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.13em;
+      font-size: 0.68rem;
+    }
+
+    .action:hover { background: rgba(215,173,55,0.22); }
+    .action.secondary { background: rgba(255,255,255,0.04); color: var(--muted); }
+    .action.danger { border-color: rgba(184,75,75,0.55); color: #ffc8c8; background: rgba(184,75,75,0.12); }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+    }
+
+    .grid.wide { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
+
+    .card {
+      border: 1px solid rgba(215,173,55,0.2);
+      background: linear-gradient(145deg, rgba(255,255,255,0.065), rgba(255,255,255,0.018));
+      min-height: 184px;
+      padding: 18px;
+      position: relative;
+      overflow: hidden;
+      transition: 0.24s ease;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      opacity: 0;
+      transition: 0.24s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(215,173,55,0.44);
+      box-shadow: 0 12px 36px rgba(0,0,0,0.3);
+    }
+
+    .card:hover::before { opacity: 1; }
+
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: flex-start;
+      margin-bottom: 12px;
+    }
+
+    .card h3 {
+      color: var(--gold-bright);
+      font-size: 1.08rem;
+      line-height: 1.2;
+      letter-spacing: 0.02em;
+    }
+
+    .card p {
+      color: var(--muted);
+      line-height: 1.58;
+      font-size: 0.94rem;
+      margin-top: 8px;
+      font-weight: 300;
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 14px;
+    }
+
+    .tag {
+      border: 1px solid rgba(255,255,255,0.14);
+      color: var(--muted);
+      background: rgba(0,0,0,0.22);
+      padding: 4px 8px;
+      font-family: "Courier New", monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .tag.gold { color: var(--gold-bright); border-color: rgba(215,173,55,0.36); }
+    .tag.ok { color: #9ce7ba; border-color: rgba(97,199,143,0.35); }
+    .tag.warn { color: #ffc28f; border-color: rgba(255,170,91,0.35); }
+
+    .mini {
+      color: var(--dim);
+      font-family: "Courier New", monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      font-size: 0.62rem;
+      line-height: 1.5;
+    }
+
+    .timeline {
+      display: grid;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .timeline-item {
+      display: grid;
+      grid-template-columns: minmax(160px, 0.45fr) 1fr;
+      gap: 14px;
+      padding: 14px 16px;
+      border: 1px solid rgba(255,255,255,0.09);
+      background: rgba(0,0,0,0.22);
+    }
+
+    .timeline-item strong {
+      color: var(--gold-bright);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-size: 0.92rem;
+    }
+
+    .timeline-item span {
+      color: var(--muted);
+      line-height: 1.55;
+      font-size: 0.92rem;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: minmax(0, 0.9fr) minmax(320px, 0.55fr);
+      gap: 18px;
+    }
+
+    .panel {
+      border: 1px solid rgba(255,255,255,0.09);
+      background: rgba(0,0,0,0.22);
+      padding: 18px;
+    }
+
+    .panel h3 {
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      font-family: "Courier New", monospace;
+      font-size: 0.72rem;
+      margin-bottom: 12px;
+    }
+
+    .panel ul {
+      list-style: none;
+      display: grid;
+      gap: 10px;
+    }
+
+    .panel li {
+      color: var(--muted);
+      line-height: 1.55;
+      padding-left: 16px;
+      position: relative;
+      font-size: 0.94rem;
+    }
+
+    .panel li::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border: 1px solid var(--gold);
+      position: absolute;
+      left: 0;
+      top: 0.48em;
+      transform: rotate(45deg);
+    }
+
+    .rank-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 8px;
+      margin: 18px 0 26px;
+    }
+
+    .rank-pill {
+      border: 1px solid rgba(215,173,55,0.18);
+      background: rgba(0,0,0,0.2);
+      padding: 12px;
+    }
+
+    .rank-pill span {
+      display: block;
+      color: var(--dim);
+      font-family: "Courier New", monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.13em;
+      font-size: 0.58rem;
+      margin-bottom: 4px;
+    }
+
+    .rank-pill strong { color: var(--gold-bright); font-size: 0.96rem; }
+
+    .question-card {
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(0,0,0,0.26);
+      padding: 16px;
+    }
+
+    .question-card h3 { font-size: 1rem; color: var(--ink); line-height: 1.45; }
+
+    .options {
+      display: grid;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .option {
+      border: 1px solid rgba(255,255,255,0.1);
+      padding: 10px 12px;
+      color: var(--muted);
+      background: rgba(255,255,255,0.025);
+    }
+
+    .option.correct {
+      border-color: rgba(97,199,143,0.5);
+      color: #bbf0ce;
+      background: rgba(97,199,143,0.09);
+    }
+
+    .upload-zone {
+      border: 1px dashed rgba(215,173,55,0.5);
+      background: rgba(0,0,0,0.24);
+      padding: 20px;
+      display: grid;
+      gap: 14px;
+    }
+
+    .file-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .file-item {
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(0,0,0,0.22);
+      padding: 14px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .saved-note {
+      white-space: pre-wrap;
+      color: var(--muted);
+      line-height: 1.55;
+      font-size: 0.93rem;
+      max-height: 180px;
+      overflow: auto;
+      padding: 12px;
+      background: rgba(0,0,0,0.2);
+      border: 1px solid rgba(255,255,255,0.07);
+    }
+
+    footer {
+      border-top: 1px solid var(--line);
+      padding: 26px 0 0;
+      margin-top: 28px;
+      text-align: center;
+      color: var(--dim);
+      font-family: "Courier New", monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      font-size: 0.68rem;
+      line-height: 1.8;
+    }
+
+    .print-paper {
+      display: none;
+    }
+
+    @media (max-width: 920px) {
+      .hero,
+      .two-col {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        align-items: start;
+        min-height: auto;
+      }
+
+      .hero-panel {
+        order: 2;
+      }
+
+      .section-head {
+        display: block;
+      }
+
+      .timeline-item {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .stat-grid,
+      .grid,
+      .grid.wide,
+      .rank-list {
+        grid-template-columns: 1fr;
+      }
+
+      .section {
+        padding: 18px;
+      }
+
+      .tab-btn {
+        flex: 1 1 calc(50% - 8px);
+      }
+    }
+
+    @media print {
+      body { background: white; color: black; }
+      .hero, .nav-wrap, .section:not(#exams), footer, .tools, .action { display: none !important; }
+      #exams { display: block !important; background: white; border: 0; box-shadow: none; padding: 0; margin: 0; }
+      #exams::before, .section-head, #questionBank, #customQuestionForm { display: none !important; }
+      .print-paper { display: block; color: black; }
+      .print-paper h2 { margin-bottom: 10px; }
+      .print-paper ol { margin-left: 22px; line-height: 1.6; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header class="hero">
+      <div>
+        <div class="seal" aria-hidden="true">
+          <svg viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="43" fill="none" stroke="#d7ad37" stroke-width="2" />
+            <circle cx="50" cy="50" r="31" fill="none" stroke="#d7ad37" stroke-width="1" />
+            <circle cx="50" cy="50" r="5" fill="#ffcf5b" />
+            <g stroke="#d7ad37" stroke-width="1.1">
+              <line x1="50" y1="13" x2="50" y2="44" />
+              <line x1="68" y1="18" x2="55" y2="43" />
+              <line x1="82" y1="32" x2="58" y2="46" />
+              <line x1="87" y1="50" x2="56" y2="50" />
+              <line x1="82" y1="68" x2="58" y2="54" />
+              <line x1="68" y1="82" x2="55" y2="57" />
+              <line x1="50" y1="87" x2="50" y2="56" />
+              <line x1="32" y1="82" x2="45" y2="57" />
+              <line x1="18" y1="68" x2="42" y2="54" />
+              <line x1="13" y1="50" x2="44" y2="50" />
+              <line x1="18" y1="32" x2="42" y2="46" />
+              <line x1="32" y1="18" x2="45" y2="43" />
+            </g>
+          </svg>
+        </div>
+        <p class="eyebrow">Army | Air Force | Navy | Defence Prep</p>
+        <h1>Indian Defence Knowledge Portal</h1>
+        <p class="lead">
+          A single-file web app for learning ranks, equipment, missiles, aircraft, ships,
+          satellites, drones, joining routes, eligibility, training, special forces, uniforms,
+          service duties, exam practice, notes, questions, and current affairs.
+        </p>
+      </div>
+
+      <aside class="hero-panel">
+        <h2>Public Snapshot</h2>
+        <div class="stat-grid">
+          <div class="stat"><strong>3</strong><span>Primary services: Army, Air Force, Navy.</span></div>
+          <div class="stat"><strong>1.43M</strong><span>Estimated active personnel, public estimates vary.</span></div>
+          <div class="stat"><strong>2</strong><span>Active aircraft carriers: Vikramaditya and Vikrant.</span></div>
+          <div class="stat"><strong>4 Years</strong><span>Agniveer engagement period, including training.</span></div>
+        </div>
+        <p class="top-note">Educational public data only. Always verify live vacancies, age cut-offs, syllabus, and medical standards on official portals.</p>
+      </aside>
+    </header>
+
+    <div class="nav-wrap">
+      <nav aria-label="Main sections">
+        <button class="tab-btn active" data-target="overview">Overview</button>
+        <button class="tab-btn" data-target="army">Army</button>
+        <button class="tab-btn" data-target="airforce">Air Force</button>
+        <button class="tab-btn" data-target="navy">Navy</button>
+        <button class="tab-btn" data-target="missiles">Missiles</button>
+        <button class="tab-btn" data-target="equipment">Equipment</button>
+        <button class="tab-btn" data-target="space">Space + Drones</button>
+        <button class="tab-btn" data-target="join">How To Join</button>
+        <button class="tab-btn" data-target="exams">Question Bank</button>
+        <button class="tab-btn" data-target="uploads">Upload Notes</button>
+      </nav>
+    </div>
+
+    <main>
+      <section id="overview" class="section active overview-bg">
+        <div class="section-content">
+          <div class="section-head">
+            <div>
+              <p class="section-kicker">Command Map</p>
+              <h2 class="section-title">Start Here</h2>
+            </div>
+            <p class="section-copy">
+              This portal is arranged like a study dashboard. Use the service pages for rank and role basics,
+              the catalog pages for platforms and weapon systems, and the exam pages for practice and notes.
+            </p>
+          </div>
+
+          <div class="grid">
+            <article class="card">
+              <div class="card-top"><h3>Indian Army</h3><span class="mini">Land Power</span></div>
+              <p>Infantry, armoured corps, artillery, engineers, air defence, signals, logistics, and special operations.</p>
+              <div class="tag-row"><span class="tag gold">Ranks</span><span class="tag">Tanks</span><span class="tag">Artillery</span><span class="tag">Para SF</span></div>
+            </article>
+            <article class="card">
+              <div class="card-top"><h3>Indian Air Force</h3><span class="mini">Air Power</span></div>
+              <p>Fighters, transports, helicopters, AEW&C, air defence, missile systems, air bases, and Garud commandos.</p>
+              <div class="tag-row"><span class="tag gold">Aircraft</span><span class="tag">AFCAT</span><span class="tag">Agniveervayu</span></div>
+            </article>
+            <article class="card">
+              <div class="card-top"><h3>Indian Navy</h3><span class="mini">Sea Power</span></div>
+              <p>Aircraft carriers, submarines, destroyers, frigates, corvettes, patrol vessels, naval aviation, and MARCOS.</p>
+              <div class="tag-row"><span class="tag gold">Fleet</span><span class="tag">SSR</span><span class="tag">MR</span><span class="tag">INA</span></div>
+            </article>
+            <article class="card">
+              <div class="card-top"><h3>Study Workspace</h3><span class="mini">Prep System</span></div>
+              <p>Upload notes, store current affairs, add your own questions, generate practice papers, and print mock tests.</p>
+              <div class="tag-row"><span class="tag ok">Local Storage</span><span class="tag">Question Bank</span><span class="tag">Current Affairs</span></div>
+            </article>
+          </div>
+
+          <div class="timeline">
+            <div class="timeline-item"><strong>Public Safety</strong><span>The catalog intentionally avoids classified deployment details, tactics, readiness rates, and sensitive operating procedures.</span></div>
+            <div class="timeline-item"><strong>Current Data</strong><span>Personnel and inventory numbers are public estimates. Recruitment and exam data should be checked against the latest official notification before applying.</span></div>
+            <div class="timeline-item"><strong>Your Expansion</strong><span>Use the upload page to add notes, question papers, current affairs, and extra weapon-system facts. Text files are previewed in-browser.</span></div>
+          </div>
+
+          <div class="panel" style="margin-top:18px;">
+            <h3>Official Reference Links</h3>
+            <ul>
+              <li><a href="https://joinindianarmy.nic.in/" target="_blank" rel="noopener">Join Indian Army</a> for Army recruitment notifications and applicant login.</li>
+              <li><a href="https://careerairforce.gov.in/" target="_blank" rel="noopener">Career Indian Air Force</a> for AFCAT, NDA, branch, training, and eligibility guidance.</li>
+              <li><a href="https://www.joinindiannavy.gov.in/" target="_blank" rel="noopener">Join Indian Navy</a> for officer, SSR, MR, exam, and training information.</li>
+              <li><a href="https://www.drdo.gov.in/" target="_blank" rel="noopener">DRDO</a> for public missile, tank, artillery, and technology product pages.</li>
+              <li><a href="https://www.isro.gov.in/" target="_blank" rel="noopener">ISRO</a> for public satellite mission pages such as GSAT-7, GSAT-7A, and EMISAT.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section id="army" class="section army-bg">
+        <div class="section-content">
+          <div class="section-head">
+            <div>
+              <p class="section-kicker">Indian Army</p>
+              <h2 class="section-title">Land Forces</h2>
+            </div>
+            <p class="section-copy">Ranks, roles, training, formations, major land systems, uniforms, duties, and entry pathways for Army aspirants.</p>
+          </div>
+
+          <div class="rank-list" id="armyRanks"></div>
+          <div class="grid wide" id="armyCards"></div>
+        </div>
+      </section>
+
+      <section id="airforce" class="section air-bg">
+        <div class="section-content">
+          <div class="section-head">
+            <div>
+              <p class="section-kicker">Indian Air Force</p>
+              <h2 class="section-title">Air Power</h2>
+            </div>
+            <p class="section-copy">Aircraft, ranks, branches, air defence, training, Garud special forces, uniforms, and joining routes.</p>
+          </div>
+
+          <div class="rank-list" id="airRanks"></div>
+          <div class="grid wide" id="airCards"></div>
+        </div>
+      </section>
+
+      <section id="navy" class="section navy-bg">
+        <div class="section-content">
+          <div class="section-head">
+            <div>
+              <p class="section-kicker">Indian Navy</p>
+              <h2 class="section-title">Sea Power</h2>
+            </div>
+            <p class="section-copy">Fleet categories, naval aviation, submarines, training, ranks, MARCOS, sea duty, uniforms, and sailor/officer entries.</p>
+          </div>
+
+          <div class="rank-list" id="navyRanks"></div>
+          <div class="grid wide" id="navyCards"></div>
+        </div>
+      </section>
+
+      <section id="missiles" class="section missile-bg">
+        <div class="section-content">
+          <div class="section-head">
+            <div>
+              <p class="section-kicker">Missile Catalog</p>
+              <h2 class="section-title">Strike + Air Defence</h2>
+            </div>
+            <p class="section-copy">Public, educational overview of major Indian missile families and air defence systems. Ranges are approximate public figures and can vary by variant.</p>
+          </div>
+
+          <div class="tools">
+            <input class="input" id="missileSearch" type="search" placeholder="Search missiles, roles, ranges..." />
+            <select class="select" id="missileFilter">
+              <option value="all">All Types</option>
+              <option value="Ballistic">Ballistic</option>
+              <option value="Cruise">Cruise</option>
+              <option value="SAM">SAM</option>
+              <option value="AAM">AAM</option>
+              <option value="ATGM">ATGM</option>
+              <option value="SLBM">SLBM</option>
+            </select>
+          </div>
+          <div class="grid" id="missileGrid"></div>
+        </div>
+      </section>
+
+      <section id="equipment" class="section equipment-bg">
+        <div class="section-content">
+          <div class="section-head">
+            <div>
+              <p class="section-kicker">Platforms + Weapons</p>
+              <h2 class="section-title">Equipment Room</h2>
+            </div>
+            <p class="section-copy">Representative public catalog across tanks, artillery, infantry weapons, aircraft, vessels, trucks, SAM systems, radars, and support platforms.</p>
+          </div>
+
+          <div class="tools">
+            <input class="input" id="equipmentSearch" type="search" placeholder="Search tank, gun, aircraft, vessel, truck..." />
+            <select class="select" id="equipmentFilter">
+              <option value="all">All Categories</option>
+              <option value="Tank">Tanks</option>
+              <option value="Artillery">Artillery</option>
+              <option value="Aircraft">Aircraft</option>
+              <option value="Vessel">Vessels</option>
+              <option value="Infantry">Infantry Weapons</option>
+              <option value="Vehicle">Vehicles</option>
+              <option value="Air Defence">Air Defence</option>
+            </select>
+          </div>
+          <div class="grid" id="equipmentGrid"></div>
+        </div>
+      </section>
+
+      <section id="space" class="section space-bg">
+        <div class="section-content">
+          <div class="section-head">
+            <div>
+              <p class="section-kicker">Satellites + UAV</p>
+              <h2 class="section-title">Space And Drones</h2>
+            </div>
+            <p class="section-copy">Public overview of communication, navigation, earth observation, ISR, AEW&C, and unmanned systems used in defence support roles.</p>
+          </div>
+
+          <div class="grid wide" id="spaceCards"></div>
+        </div>
+      </section>
+
+      <section id="join" class="section join-bg">
+        <div class="section-content">
+          <div class="section-head">
+            <div>
+              <p class="section-kicker">Career Pathways</p>
+              <h2 class="section-title">How To Join</h2>
+            </div>
+            <p class="section-copy">A study-first guide to officer and Agniveer entries. Dates, age cut-offs, vacancies, physical standards, and medical rules can change every notification cycle.</p>
+          </div>
+
+          <div class="two-col">
+            <div>
+              <div class="grid wide" id="joinCards"></div>
+            </div>
+            <aside class="panel">
+              <h3>Selection Flow</h3>
+              <ul>
+                <li>Read the latest official notification before applying.</li>
+                <li>Check age, education, gender, marital status, height, eyesight, and medical standards.</li>
+                <li>Apply online through official portals only.</li>
+                <li>Clear written exam or shortlisting stage.</li>
+                <li>Clear SSB or AFSB where applicable, then medicals and merit list.</li>
+                <li>Report to the allotted academy or training centre.</li>
+              </ul>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <section id="exams" class="section exam-bg">
+        <div class="section-content">
+          <div class="section-head">
+            <div>
+              <p class="section-kicker">Question Bank</p>
+              <h2 class="section-title">Practice Zone</h2>
+            </div>
+            <p class="section-copy">Filter practice questions, reveal answers, add your own questions, and print a mock paper from the current set.</p>
+          </div>
+
+          <div class="tools">
+            <input class="input" id="questionSearch" type="search" placeholder="Search question, topic, exam..." />
+            <select class="select" id="questionFilter">
+              <option value="all">All Exams</option>
+              <option value="NDA">NDA</option>
+              <option value="CDS">CDS</option>
+              <option value="AFCAT">AFCAT</option>
+              <option value="Agniveer">Agniveer</option>
+              <option value="Navy SSR/MR">Navy SSR/MR</option>
+              <option value="Current Affairs">Current Affairs</option>
+            </select>
+            <button class="action" id="toggleAnswers">Reveal Answers</button>
+            <button class="action secondary" id="printPaper">Print Mock Paper</button>
+          </div>
+
+          <div class="two-col">
+            <div>
+              <div class="grid wide" id="questionBank"></div>
+            </div>
+            <aside class="panel" id="customQuestionForm">
+              <h3>Add Your Question</h3>
+              <div class="tools" style="display:grid;gap:10px;margin:0;">
+                <input class="input" id="customExam" placeholder="Exam tag, e.g. NDA" />
+                <textarea id="customQuestion" rows="4" placeholder="Question text"></textarea>
+                <input class="input" id="customOptions" placeholder="Options separated by |" />
+                <input class="input" id="customAnswer" placeholder="Correct option text" />
+                <button class="action" id="saveQuestion">Save Question</button>
+              </div>
+              <p class="top-note">Saved questions stay in this browser using localStorage.</p>
+            </aside>
+          </div>
+
+          <div class="print-paper" id="printPaperContent"></div>
+        </div>
+      </section>
+
+      <section id="uploads" class="section upload-bg">
+        <div class="section-content">
+          <div class="section-head">
+            <div>
+              <p class="section-kicker">Your Study Store</p>
+              <h2 class="section-title">Upload Notes</h2>
+            </div>
+            <p class="section-copy">Add notes, question papers, PDFs, current affairs, and personal reminders. Text files can be previewed; larger files are stored as metadata because browsers limit localStorage size.</p>
+          </div>
+
+          <div class="two-col">
+            <div class="upload-zone">
+              <label class="mini" for="noteFile">Upload notes, question papers, current affairs, PDFs, images, or text files</label>
+              <input class="input" id="noteFile" type="file" multiple />
+              <input class="input" id="noteTitle" placeholder="Title or subject, e.g. CDS Polity Notes" />
+              <select class="select" id="noteCategory">
+                <option>Notes</option>
+                <option>Question Paper</option>
+                <option>Current Affairs</option>
+                <option>Syllabus</option>
+                <option>Revision</option>
+              </select>
+              <textarea id="manualNote" rows="7" placeholder="Paste or type notes here..."></textarea>
+              <div class="tools" style="margin:0;">
+                <button class="action" id="saveNote">Save To Browser</button>
+                <button class="action danger" id="clearNotes">Clear Saved Notes</button>
+              </div>
+            </div>
+
+            <aside class="panel">
+              <h3>Study Buckets</h3>
+              <ul>
+                <li>Notes: formulas, dates, rank charts, geography, polity, defence facts.</li>
+                <li>Question Paper: previous year questions, mock tests, your mistakes.</li>
+                <li>Current Affairs: defence launches, exercises, appointments, awards, budgets.</li>
+                <li>Revision: one-page summaries, SSB stories, interview answers.</li>
+              </ul>
+            </aside>
+          </div>
+
+          <div class="file-list" id="savedNotes"></div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      Indian Defence Knowledge Portal | Educational public information | Verify live data on official portals | Jai Hind
+    </footer>
+  </div>
+
+  <script>
+    const $ = (selector) => document.querySelector(selector);
+    const $$ = (selector) => Array.from(document.querySelectorAll(selector));
+
+    const armyRanks = [
+      ["Officer", "Field Marshal"], ["Officer", "General"], ["Officer", "Lieutenant General"], ["Officer", "Major General"],
+      ["Officer", "Brigadier"], ["Officer", "Colonel"], ["Officer", "Lieutenant Colonel"], ["Officer", "Major"],
+      ["Officer", "Captain"], ["Officer", "Lieutenant"], ["JCO", "Subedar Major"], ["JCO", "Subedar"],
+      ["JCO", "Naib Subedar"], ["OR", "Havildar"], ["OR", "Naik"], ["OR", "Lance Naik"], ["OR", "Sepoy"]
+    ];
+
+    const airRanks = [
+      ["Marshal", "Marshal of the Air Force"], ["Officer", "Air Chief Marshal"], ["Officer", "Air Marshal"], ["Officer", "Air Vice Marshal"],
+      ["Officer", "Air Commodore"], ["Officer", "Group Captain"], ["Officer", "Wing Commander"], ["Officer", "Squadron Leader"],
+      ["Officer", "Flight Lieutenant"], ["Officer", "Flying Officer"], ["Airmen", "Master Warrant Officer"], ["Airmen", "Warrant Officer"],
+      ["Airmen", "Junior Warrant Officer"], ["Airmen", "Sergeant"], ["Airmen", "Corporal"], ["Airmen", "Leading Aircraftman"]
+    ];
+
+    const navyRanks = [
+      ["Officer", "Admiral"], ["Officer", "Vice Admiral"], ["Officer", "Rear Admiral"], ["Officer", "Commodore"],
+      ["Officer", "Captain"], ["Officer", "Commander"], ["Officer", "Lieutenant Commander"], ["Officer", "Lieutenant"],
+      ["Officer", "Sub Lieutenant"], ["Sailor", "Master Chief Petty Officer I"], ["Sailor", "Master Chief Petty Officer II"],
+      ["Sailor", "Chief Petty Officer"], ["Sailor", "Petty Officer"], ["Sailor", "Leading Seaman"], ["Sailor", "Seaman"]
+    ];
+
+    const armyCards = [
+      ["Armoured Corps", "Main battle tanks and armoured formations deliver shock action and mobility. Key platforms include T-90 Bhishma, T-72 Ajeya, Arjun MBT, BMP-2 infantry combat vehicles, and armoured recovery/bridge systems.", ["Tanks", "Mechanised", "Desert + Plains"]],
+      ["Artillery", "The artillery arm uses tube artillery, rocket artillery, precision ammunition, target acquisition, and command systems. Publicly known systems include K9 Vajra, M777, Dhanush, Pinaka, Smerch, Grad, and ATAGS.", ["Fire Support", "155 mm", "Rockets"]],
+      ["Air Defence", "Army Air Defence protects field formations and vital points from aircraft, helicopters, UAVs, and cruise missile threats. Public systems include Akash, MRSAM, Spyder, L-70 upgrades, ZU-23, and MANPADS.", ["SAM", "UAV Defence", "Mobile"]],
+      ["Infantry", "Infantry battalions hold ground, dominate terrain, conduct patrols, raids, counter-insurgency, and defensive/offensive operations. Equipment includes small arms, support weapons, body armour, communications, night sights, and drones.", ["Rifles", "Mortars", "Field Craft"]],
+      ["Special Forces", "Para SF units are trained for special reconnaissance, direct action, counter-terrorism, high altitude tasks, and behind-the-line operations. Public details are intentionally limited.", ["Para SF", "Airborne", "High Skill"]],
+      ["Training Centres", "Important Army institutions include NDA Khadakwasla, IMA Dehradun, OTA Chennai/Gaya, Army War College Mhow, Infantry School Mhow, High Altitude Warfare School Gulmarg, and regimental centres.", ["NDA", "IMA", "OTA"]],
+      ["Uniform + Duty", "Army personnel use ceremonial, combat, working, and specialist dress depending on role and terrain. Duties vary from border management and internal security support to UN peacekeeping and disaster relief.", ["Combat Dress", "Ceremonial", "Field Duty"]],
+      ["Personnel", "Public estimates put India's armed forces at about 1.43 million active personnel overall, with a very large Army component. Exact strengths change and are not always published in official real-time format.", ["Public Estimate", "Active", "Reserve"]]
+    ];
+
+    const airCards = [
+      ["Fighter Fleet", "Representative combat aircraft include Rafale, Su-30MKI, Mirage 2000, MiG-29UPG, Jaguar, and LCA Tejas. Roles include air superiority, strike, air defence, maritime strike, and close support.", ["Rafale", "Su-30MKI", "Tejas"]],
+      ["Transport + Refuelling", "Transport and support aircraft include C-17 Globemaster III, C-130J Super Hercules, IL-76, An-32, Dornier, and IL-78 tankers for strategic/tactical lift and aerial refuelling.", ["Lift", "Tankers", "Logistics"]],
+      ["Helicopters", "Rotary platforms include Apache attack helicopters, Chinook heavy-lift helicopters, Mi-17 variants, ALH Dhruv, Light Combat Helicopter Prachand, and Chetak/Cheetah families.", ["Attack", "Lift", "Utility"]],
+      ["Air Defence Network", "The IAF operates layered air defence with fighters, sensors, SAM systems, command networks, and bases. Systems publicly associated include Akash, MRSAM, S-400, Spyder, and legacy assets.", ["SAM", "Radar", "Interceptors"]],
+      ["Garud Commandos", "Garud special forces protect air bases, conduct combat search and rescue, counter-terrorism, special reconnaissance, and support air operations. Training and operations details are limited publicly.", ["Special Forces", "CSAR", "Base Security"]],
+      ["Training Centres", "Key training institutions include Air Force Academy Dundigal, Air Force Technical College Bengaluru, flying training establishments, and specialist branch schools.", ["AFA", "Flying", "Ground Duty"]],
+      ["Joining Routes", "Main officer routes include NDA, CDSE, AFCAT, and NCC Special Entry. Airmen entry is through Agniveervayu recruitment. Requirements differ by branch and notification.", ["NDA", "AFCAT", "Agniveervayu"]],
+      ["Uniform + Duty", "IAF personnel use ceremonial blues, working dress, flying overalls, combat dress, and specialist gear. Duties span air operations, maintenance, air defence, logistics, medical, admin, and training.", ["Flying", "Technical", "Ground Duty"]]
+    ];
+
+    const navyCards = [
+      ["Aircraft Carriers", "India operates INS Vikramaditya and INS Vikrant. Carriers project air power at sea and embark MiG-29K fighters and helicopters for fleet air defence, strike, AEW, ASW, and search-and-rescue roles.", ["Vikramaditya", "Vikrant", "Naval Aviation"]],
+      ["Destroyers", "Guided missile destroyers are high-end surface combatants for air defence, anti-ship, land attack, and escort duties. Public classes include Visakhapatnam, Kolkata, Delhi, and older Rajput class lineage.", ["Destroyer", "BrahMos", "Fleet Escort"]],
+      ["Frigates", "Frigates perform escort, ASW, air defence, and surface warfare. Public classes include Shivalik, Talwar, Brahmaputra, and Project 17A Nilgiri class ships.", ["Frigate", "ASW", "Stealth"]],
+      ["Corvettes + Patrol Vessels", "Corvettes and offshore patrol vessels cover littoral warfare, anti-submarine tasks, anti-surface patrols, EEZ surveillance, and constabulary missions. Examples include Kamorta, Kora, Khukri, Veer, Saryu, and Sukanya families.", ["Corvette", "OPV", "Littoral"]],
+      ["Submarines", "The submarine arm includes conventional attack submarines and strategic ballistic missile submarines. Public classes include Kalvari/Scorpene, Sindhughosh, Shishumar, and Arihant-class SSBNs.", ["SSK", "SSBN", "Deterrence"]],
+      ["Naval Aviation", "Naval air assets include MiG-29K, P-8I maritime patrol aircraft, Dornier aircraft, MH-60R, Kamov, ALH, and carrier-borne helicopters.", ["P-8I", "MiG-29K", "MH-60R"]],
+      ["MARCOS", "Marine Commandos are trained for maritime special operations, ship intervention, counter-terrorism, special reconnaissance, and amphibious tasks. Public details are intentionally broad.", ["Special Forces", "Maritime", "Amphibious"]],
+      ["Training Centres", "Key institutions include Indian Naval Academy Ezhimala, INS Chilka for sailor/Agniveer initial training, INS Shivaji, INS Valsura, INS Hamla, and specialist schools.", ["INA", "INS Chilka", "Specialist"]]
+    ];
+
+    const missiles = [
+      ["Agni-I", "Ballistic", "Approx 700-1,200 km", "Road/rail mobile ballistic missile in the Agni family for strategic deterrence.", ["Strategic", "Solid Fuel"]],
+      ["Agni-II", "Ballistic", "Approx 2,000-3,500 km", "Medium range ballistic missile in the Agni family, publicly associated with strategic forces.", ["Strategic", "MRBM"]],
+      ["Agni-III", "Ballistic", "Approx 3,000-5,000 km", "Intermediate range Agni system for longer-range deterrence missions.", ["Strategic", "IRBM"]],
+      ["Agni-IV", "Ballistic", "Approx 3,500-4,000 km", "Long range ballistic missile with improved navigation, mobility, and strategic reach.", ["Strategic", "IRBM"]],
+      ["Agni-V", "Ballistic", "Approx 5,000 km plus", "Canisterized long-range ballistic missile. Public ranges vary by source.", ["Strategic", "Canisterized"]],
+      ["Agni-P", "Ballistic", "Approx 1,000-2,000 km", "New-generation Agni Prime missile, publicly described as a canisterized ballistic missile.", ["New Gen", "MRBM"]],
+      ["Prithvi", "Ballistic", "Approx 150-350 km", "Short range ballistic missile family with Army, Air Force, and naval variants publicly reported.", ["SRBM", "Legacy"]],
+      ["Dhanush", "Ballistic", "Approx 350 km", "Ship-launched variant associated with the Prithvi family.", ["Naval", "Ship Launch"]],
+      ["BrahMos", "Cruise", "Approx 290 km plus by variant", "Supersonic cruise missile jointly developed by India and Russia, launched from land, sea, air, and tested for submarine launch concept.", ["Supersonic", "Anti-Ship", "Land Attack"]],
+      ["Nirbhay / ITCM", "Cruise", "Approx 1,000 km reported", "Indigenous subsonic cruise missile technology demonstrator family; public development status varies by variant.", ["Subsonic", "Long Range"]],
+      ["Akash", "SAM", "Approx 25-30 km", "Short range surface-to-air missile system for air defence of vulnerable areas and points.", ["IAF", "Army", "Mobile"]],
+      ["MRSAM / Barak-8", "SAM", "Approx 70 km plus", "Medium range surface-to-air missile family developed with Israel for Army, Navy, and Air Force variants.", ["Air Defence", "Naval", "Land"]],
+      ["S-400", "SAM", "Publicly 400 km class by missile", "Long range air defence system procured from Russia; details vary by missile interceptor type.", ["Long Range", "Air Defence"]],
+      ["Astra", "AAM", "Approx 100 km plus by variant", "Indigenous beyond-visual-range air-to-air missile for fighter aircraft.", ["BVR", "Air Combat"]],
+      ["R-73 / ASRAAM / MICA", "AAM", "Short to medium range", "Air-to-air missile families used across IAF fighter platforms for within-visual and beyond-visual range engagements.", ["AAM", "Fighter"]],
+      ["Nag", "ATGM", "Approx 4 km land variant", "Third-generation fire-and-forget anti-tank guided missile family.", ["ATGM", "Armour"]],
+      ["HELINA / Dhruvastra", "ATGM", "Approx 7-8 km reported", "Helicopter-launched anti-tank missile family for rotary platforms.", ["Helicopter", "ATGM"]],
+      ["MPATGM", "ATGM", "Approx 2.5 km reported", "Man-portable anti-tank guided missile developed for infantry anti-armour roles.", ["Infantry", "Fire And Forget"]],
+      ["K-15 Sagarika", "SLBM", "Approx 750 km", "Submarine-launched ballistic missile associated with India's sea-based deterrent.", ["SLBM", "SSBN"]],
+      ["K-4", "SLBM", "Approx 3,500 km reported", "Longer-range submarine-launched ballistic missile publicly associated with Arihant-class SSBN capability.", ["SLBM", "Deterrence"]]
+    ];
+
+    const equipment = [
+      ["T-90 Bhishma", "Tank", "Main battle tank forming a key part of Indian Army armoured formations.", ["Army", "MBT"]],
+      ["T-72 Ajeya", "Tank", "Older but upgraded main battle tank family still present in armoured units.", ["Army", "MBT"]],
+      ["Arjun MBT", "Tank", "Indigenous main battle tank by DRDO with 120 mm rifled gun, mobility, protection, and fire-control systems.", ["DRDO", "MBT"]],
+      ["BMP-2 Sarath", "Vehicle", "Infantry combat vehicle used by mechanised infantry for protected mobility and fire support.", ["IFV", "Mechanised"]],
+      ["K9 Vajra", "Artillery", "155 mm tracked self-propelled howitzer adapted for Indian conditions.", ["SP Gun", "155 mm"]],
+      ["M777", "Artillery", "155 mm ultra-light howitzer useful for mountains and rapid deployment.", ["ULH", "155 mm"]],
+      ["Dhanush", "Artillery", "155 mm towed artillery gun derived from the Bofors lineage and upgraded in India.", ["Towed", "155 mm"]],
+      ["ATAGS", "Artillery", "Indigenous 155 mm/52 calibre advanced towed artillery gun system.", ["DRDO", "155 mm"]],
+      ["Pinaka", "Artillery", "Multi-barrel rocket launcher family with guided and unguided rocket variants.", ["Rocket", "MBRL"]],
+      ["INSAS / AK-203 / SIG716", "Infantry", "Representative rifle families across legacy, licensed production, and modern procurement streams.", ["Rifle", "Infantry"]],
+      ["Carl-Gustaf / ATGL", "Infantry", "Recoilless rifle and anti-armour support weapons used by infantry units.", ["Support", "Anti-Armour"]],
+      ["Rafale", "Aircraft", "French-origin multirole fighter with air superiority and strike capability.", ["IAF", "Fighter"]],
+      ["Su-30MKI", "Aircraft", "Heavy multirole air superiority fighter built/assembled with HAL involvement.", ["IAF", "Fighter"]],
+      ["LCA Tejas", "Aircraft", "Indigenous light combat aircraft developed by ADA/HAL for IAF and naval development paths.", ["IAF", "Indigenous"]],
+      ["C-17 Globemaster III", "Aircraft", "Strategic transport aircraft for heavy lift and rapid deployment.", ["IAF", "Transport"]],
+      ["Apache AH-64E", "Aircraft", "Attack helicopter used for anti-armour, close support, and armed reconnaissance roles.", ["IAF", "Attack Helo"]],
+      ["Chinook CH-47F", "Aircraft", "Heavy-lift helicopter for troop, artillery, equipment, and logistics movement.", ["IAF", "Heavy Lift"]],
+      ["INS Vikrant", "Vessel", "India's first indigenous aircraft carrier, commissioned in 2022.", ["Navy", "Carrier"]],
+      ["INS Vikramaditya", "Vessel", "STOBAR aircraft carrier and major fleet air power platform.", ["Navy", "Carrier"]],
+      ["Visakhapatnam Class", "Vessel", "Project 15B guided missile destroyer class.", ["Navy", "Destroyer"]],
+      ["Nilgiri Class P17A", "Vessel", "New-generation stealth frigate class designed for multi-role operations.", ["Navy", "Frigate"]],
+      ["Kalvari Class", "Vessel", "Scorpene-derived conventional attack submarine class.", ["Navy", "Submarine"]],
+      ["Kamorta Class", "Vessel", "Anti-submarine warfare corvette class.", ["Navy", "Corvette"]],
+      ["Tatra / Ashok Leyland / Tata Trucks", "Vehicle", "Logistics, mobility, artillery tractor, and specialist military truck families.", ["Transport", "Logistics"]],
+      ["Akash Weapon System", "Air Defence", "Mobile surface-to-air missile system operated by Army and Air Force.", ["SAM", "Mobile"]],
+      ["MRSAM", "Air Defence", "Medium-range air defence system for land and naval variants.", ["SAM", "Medium Range"]],
+      ["Rajendra / Rohini / Arudhra Radars", "Air Defence", "Representative Indian radar systems for surveillance, fire-control, and air defence networks.", ["Radar", "Sensors"]]
+    ];
+
+    const spaceCards = [
+      ["GSAT-7", "Advanced communication satellite providing wide spectrum communication services over oceanic regions and Indian landmass. Publicly associated with naval communication support.", ["Communication", "GSO", "Navy"]],
+      ["GSAT-7A", "Communication satellite built by ISRO to provide Ku-band communication capability over the Indian region. Publicly associated with air communication support.", ["Communication", "Ku Band", "IAF"]],
+      ["EMISAT", "ISRO satellite placed in sun-synchronous polar orbit for electromagnetic spectrum measurement.", ["ELINT", "SSPO", "ISR"]],
+      ["Cartosat Series", "Earth observation satellite family useful for mapping, infrastructure, disaster management, and public remote sensing applications.", ["EO", "Imaging", "Mapping"]],
+      ["RISAT Series", "Radar imaging satellite family useful for all-weather earth observation applications.", ["Radar Imaging", "EO", "All Weather"]],
+      ["NavIC", "Indian regional navigation satellite system supporting positioning, timing, navigation, and strategic autonomy.", ["Navigation", "Timing", "India"]],
+      ["Netra AEW&C", "Airborne early warning and control aircraft system based on Embraer platform for aerial surveillance and battle management.", ["AEW&C", "Airborne Radar", "IAF"]],
+      ["P-8I", "Long-range maritime patrol and anti-submarine aircraft used by the Indian Navy for surveillance, ASW, and maritime domain awareness.", ["Maritime", "ASW", "Navy"]],
+      ["Heron / Searcher UAV", "Israeli-origin UAV families used for surveillance and reconnaissance across services.", ["UAV", "ISR", "Endurance"]],
+      ["Drishti 10 Starliner", "MALE UAV platform publicly described for ISR roles, with 36 hours endurance and 450 kg payload capacity in manufacturer statements.", ["MALE UAV", "ISR", "Endurance"]],
+      ["MQ-9B / SeaGuardian", "High-altitude long-endurance UAV family associated with Indian tri-service procurement and maritime ISR discussions.", ["HALE UAV", "ISR", "Maritime"]],
+      ["TAPAS / Rustom-II", "DRDO MALE UAV development family for intelligence, surveillance, target acquisition, and reconnaissance roles.", ["DRDO", "UAV", "Development"]]
+    ];
+
+    const joinCards = [
+      ["NDA", "After 10+2. UPSC exam, SSB, medicals, then National Defence Academy. Common route for Army, Navy, and Air Force officer cadets. Training at NDA is three years followed by service academy training.", ["10+2", "UPSC", "SSB"]],
+      ["CDS / CDSE", "Graduate entry through UPSC for IMA, INA, AFA, and OTA depending on eligibility. Includes written exam, SSB/AFSB, medicals, merit list, and academy training.", ["Graduate", "UPSC", "Officer"]],
+      ["AFCAT", "IAF officer entry for Flying, Ground Duty Technical, and Ground Duty Non-Technical branches. Usually advertised twice a year. Flying branch requires 10+2 Maths and Physics plus graduation/BE/BTech as per rules.", ["IAF", "Flying", "Ground Duty"]],
+      ["TES / Technical Entries", "Technical officer entries for eligible PCM students or engineers, depending on service and notification. Training structure varies by service and course.", ["PCM", "Engineering", "Technical"]],
+      ["NCC Special Entry", "For eligible NCC C certificate holders. Used by Army and Air Force for specific entries. Shortlisting and SSB/AFSB rules vary by notification.", ["NCC C", "SSB", "Officer"]],
+      ["JAG Entry", "Judge Advocate General entry for law graduates meeting service-specific eligibility. Selection usually includes shortlisting, SSB, medicals, and merit list.", ["Law", "Officer", "SSB"]],
+      ["Army Agniveer", "Soldier entry under Agnipath. Categories include GD, Technical, Office Assistant/Store Keeper, Tradesman, Women Military Police, and specialist roles. Service period is four years; retention rules are policy based.", ["17.5+", "CEE", "Rally"]],
+      ["Agniveervayu", "IAF Agniveer entry for airmen roles. Selection generally includes online test, physical fitness, adaptability, medicals, and enrolment based on merit.", ["IAF", "Online Test", "PFT"]],
+      ["Navy Agniveer SSR", "For technical sailor roles. Public Navy page lists 10+2 with Maths and Physics, or eligible diploma/vocational routes, plus age and physical standards as per notification.", ["Navy", "SSR", "10+2"]],
+      ["Navy Agniveer MR", "For MR branches such as Chef, Steward, Hygienist, and Musician. Public Navy page lists matriculation with required marks and age band as per notification.", ["Navy", "MR", "10th"]],
+      ["Training Durations", "Examples: NDA is 3 years; Indian Naval Academy cadet entry is 4 years; INA direct graduate initial training is 22 weeks; Air Force Ground Duty training is about a year; Navy Agniveers serve 4 years including training.", ["Varies", "Academy", "Verify"]],
+      ["Medical + Fitness", "Eyesight, height, weight, chest, hearing, dental, medical history, tattoos, and physical standards differ by service, branch, trade, gender, and region. Use official notifications only.", ["Medical", "PFT", "Official"]]
+    ];
+
+    const baseQuestions = [
+      ["NDA", "Which organisation conducts the NDA examination?", ["UPSC", "SSC", "NTA", "DRDO"], "UPSC"],
+      ["NDA", "NDA training is followed by training at which type of institution?", ["Service academy", "Civil court", "Police academy", "Medical college"], "Service academy"],
+      ["CDS", "CDS is a graduate-level entry for which broad purpose?", ["Commissioned officer training", "Only civilian jobs", "Only police service", "Only naval sailors"], "Commissioned officer training"],
+      ["AFCAT", "AFCAT is mainly associated with officer entry into which service?", ["Indian Air Force", "Indian Navy", "Indian Army only", "Coast Guard only"], "Indian Air Force"],
+      ["AFCAT", "For IAF Flying Branch through AFCAT, public eligibility includes which 10+2 subjects?", ["Maths and Physics", "History and Sanskrit", "Accounts only", "Biology only"], "Maths and Physics"],
+      ["Agniveer", "Under Agnipath, the usual engagement period is:", ["4 years", "1 year", "12 years", "20 years"], "4 years"],
+      ["Navy SSR/MR", "Agniveer SSR is generally a more technical sailor entry than MR.", ["True", "False", "Only for officers", "Only for pilots"], "True"],
+      ["Current Affairs", "INS Vikrant is best described as:", ["India's first indigenous aircraft carrier", "A main battle tank", "A ballistic missile", "An artillery gun"], "India's first indigenous aircraft carrier"],
+      ["Current Affairs", "BrahMos is a:", ["Supersonic cruise missile", "Main battle tank", "Transport aircraft", "Radar only"], "Supersonic cruise missile"],
+      ["Agniveer", "Which test normally checks running, push-ups or other physical standards?", ["Physical Fitness Test", "Essay paper", "Typing test only", "Interview only"], "Physical Fitness Test"],
+      ["NDA", "Which of these is a service of the Indian Armed Forces?", ["Indian Navy", "Indian Railways", "Election Commission", "Reserve Bank"], "Indian Navy"],
+      ["CDS", "OTA stands for:", ["Officers Training Academy", "Operational Tank Arsenal", "Ocean Training Authority", "Officer Tactical Aircraft"], "Officers Training Academy"],
+      ["AFCAT", "Air Force Academy is located near:", ["Dundigal, Hyderabad", "Ezhimala", "Dehradun", "Mhow"], "Dundigal, Hyderabad"],
+      ["Navy SSR/MR", "INS Chilka is associated with training of:", ["Navy sailors and Agniveers", "Only fighter pilots", "Only tank crews", "Only law officers"], "Navy sailors and Agniveers"],
+      ["Current Affairs", "Akash is publicly described by DRDO as a:", ["Short range surface-to-air missile system", "Aircraft carrier", "Diesel submarine", "Battle tank"], "Short range surface-to-air missile system"],
+      ["Current Affairs", "GSAT-7A is a type of:", ["Communication satellite", "Artillery gun", "Fighter aircraft", "Corvette"], "Communication satellite"],
+      ["NDA", "SSB mainly evaluates:", ["Officer-like qualities", "Only handwriting", "Only coding speed", "Only height"], "Officer-like qualities"],
+      ["CDS", "IMA is located at:", ["Dehradun", "Chennai", "Ezhimala", "Dundigal"], "Dehradun"],
+      ["Agniveer", "Army Agniveer recruitment commonly includes which stage?", ["Online Common Entrance Exam", "Only dance audition", "Only viva without medical", "No physical test ever"], "Online Common Entrance Exam"],
+      ["Current Affairs", "MARCOS are associated with:", ["Indian Navy special operations", "Army artillery school", "IAF transport branch", "Civil aviation"], "Indian Navy special operations"]
+    ];
+
+    let revealAnswers = false;
+
+    function renderRanks(target, ranks) {
+      $(target).innerHTML = ranks.map(([group, name]) => `
+        <div class="rank-pill"><span>${group}</span><strong>${name}</strong></div>
+      `).join("");
+    }
+
+    function renderCards(target, cards) {
+      $(target).innerHTML = cards.map(([title, body, tags]) => cardTemplate(title, body, tags)).join("");
+    }
+
+    function cardTemplate(title, body, tags = [], meta = "") {
+      return `
+        <article class="card">
+          <div class="card-top"><h3>${title}</h3>${meta ? `<span class="mini">${meta}</span>` : ""}</div>
+          <p>${body}</p>
+          <div class="tag-row">${tags.map((tag, i) => `<span class="tag ${i === 0 ? "gold" : ""}">${tag}</span>`).join("")}</div>
+        </article>
+      `;
+    }
+
+    function renderMissiles() {
+      const search = $("#missileSearch").value.toLowerCase();
+      const filter = $("#missileFilter").value;
+      const visible = missiles.filter(([name, type, range, desc, tags]) => {
+        const text = [name, type, range, desc, ...tags].join(" ").toLowerCase();
+        return (filter === "all" || type === filter) && text.includes(search);
+      });
+      $("#missileGrid").innerHTML = visible.map(([name, type, range, desc, tags]) =>
+        cardTemplate(name, desc, [type, range, ...tags], range)
+      ).join("") || emptyState("No missile cards match your search.");
+    }
+
+    function renderEquipment() {
+      const search = $("#equipmentSearch").value.toLowerCase();
+      const filter = $("#equipmentFilter").value;
+      const visible = equipment.filter(([name, type, desc, tags]) => {
+        const text = [name, type, desc, ...tags].join(" ").toLowerCase();
+        return (filter === "all" || type === filter) && text.includes(search);
+      });
+      $("#equipmentGrid").innerHTML = visible.map(([name, type, desc, tags]) =>
+        cardTemplate(name, desc, [type, ...tags], type)
+      ).join("") || emptyState("No equipment cards match your search.");
+    }
+
+    function getQuestions() {
+      const saved = JSON.parse(localStorage.getItem("defenceCustomQuestions") || "[]");
+      return [...baseQuestions, ...saved];
+    }
+
+    function renderQuestions() {
+      const search = $("#questionSearch").value.toLowerCase();
+      const filter = $("#questionFilter").value;
+      const visible = getQuestions().filter(([exam, q, options, answer]) => {
+        const text = [exam, q, answer, ...options].join(" ").toLowerCase();
+        return (filter === "all" || exam === filter) && text.includes(search);
+      });
+      $("#questionBank").innerHTML = visible.map(([exam, q, options, answer], index) => `
+        <article class="question-card">
+          <div class="card-top"><h3>Q${index + 1}. ${q}</h3><span class="mini">${exam}</span></div>
+          <div class="options">
+            ${options.map(opt => `<div class="option ${revealAnswers && opt === answer ? "correct" : ""}">${opt}</div>`).join("")}
+          </div>
+          ${revealAnswers ? `<p class="mini" style="margin-top:10px;color:#9ce7ba;">Answer: ${answer}</p>` : ""}
+        </article>
+      `).join("") || emptyState("No questions match your search.");
+      renderPrintPaper(visible);
+    }
+
+    function renderPrintPaper(questions) {
+      $("#printPaperContent").innerHTML = `
+        <h2>Indian Defence Practice Paper</h2>
+        <p>Name: ____________________ Date: ____________________</p>
+        <ol>
+          ${questions.map(([exam, q, options]) => `
+            <li>
+              <strong>[${exam}] ${q}</strong>
+              <ol type="A">${options.map(opt => `<li>${opt}</li>`).join("")}</ol>
+            </li>
+          `).join("")}
+        </ol>
+      `;
+    }
+
+    function emptyState(text) {
+      return `<div class="panel"><h3>Nothing Found</h3><p class="section-copy">${text}</p></div>`;
+    }
+
+    function saveQuestion() {
+      const exam = $("#customExam").value.trim() || "Custom";
+      const question = $("#customQuestion").value.trim();
+      const options = $("#customOptions").value.split("|").map(s => s.trim()).filter(Boolean);
+      const answer = $("#customAnswer").value.trim();
+      if (!question || options.length < 2 || !answer) {
+        alert("Add a question, at least two options separated by |, and the correct answer.");
+        return;
+      }
+      const saved = JSON.parse(localStorage.getItem("defenceCustomQuestions") || "[]");
+      saved.push([exam, question, options, answer]);
+      localStorage.setItem("defenceCustomQuestions", JSON.stringify(saved));
+      $("#customExam").value = "";
+      $("#customQuestion").value = "";
+      $("#customOptions").value = "";
+      $("#customAnswer").value = "";
+      renderQuestions();
+    }
+
+    async function saveNote() {
+      const files = Array.from($("#noteFile").files || []);
+      const title = $("#noteTitle").value.trim() || "Untitled";
+      const category = $("#noteCategory").value;
+      const manual = $("#manualNote").value.trim();
+      const saved = JSON.parse(localStorage.getItem("defenceNotes") || "[]");
+      const now = new Date().toLocaleString();
+
+      if (manual) {
+        saved.unshift({ title, category, date: now, fileName: "Manual note", size: manual.length, content: manual });
+      }
+
+      for (const file of files) {
+        let content = "";
+        if (/\.(txt|md|csv|json)$/i.test(file.name) && file.size < 700000) {
+          content = await file.text();
+        }
+        saved.unshift({
+          title: title === "Untitled" ? file.name : title,
+          category,
+          date: now,
+          fileName: file.name,
+          size: file.size,
+          type: file.type || "unknown",
+          content
+        });
+      }
+
+      if (!manual && !files.length) {
+        alert("Choose files or type a note first.");
+        return;
+      }
+
+      localStorage.setItem("defenceNotes", JSON.stringify(saved.slice(0, 80)));
+      $("#noteFile").value = "";
+      $("#noteTitle").value = "";
+      $("#manualNote").value = "";
+      renderNotes();
+    }
+
+    function renderNotes() {
+      const saved = JSON.parse(localStorage.getItem("defenceNotes") || "[]");
+      $("#savedNotes").innerHTML = saved.map((note, index) => `
+        <article class="file-item">
+          <div class="card-top">
+            <h3>${note.title}</h3>
+            <span class="mini">${note.category}</span>
+          </div>
+          <p class="mini">${note.fileName} | ${formatBytes(note.size)} | ${note.date}</p>
+          ${note.content ? `<div class="saved-note">${escapeHtml(note.content)}</div>` : `<p class="section-copy">Preview unavailable for this file type. Metadata saved in browser.</p>`}
+          <button class="action danger" onclick="deleteNote(${index})">Delete</button>
+        </article>
+      `).join("") || emptyState("No saved notes yet. Upload files or paste your current affairs notes above.");
+    }
+
+    function deleteNote(index) {
+      const saved = JSON.parse(localStorage.getItem("defenceNotes") || "[]");
+      saved.splice(index, 1);
+      localStorage.setItem("defenceNotes", JSON.stringify(saved));
+      renderNotes();
+    }
+
+    function formatBytes(bytes) {
+      if (!bytes) return "0 B";
+      const units = ["B", "KB", "MB", "GB"];
+      const i = Math.floor(Math.log(bytes) / Math.log(1024));
+      return `${(bytes / Math.pow(1024, i)).toFixed(i ? 1 : 0)} ${units[i]}`;
+    }
+
+    function escapeHtml(str) {
+      return str.replace(/[&<>"']/g, m => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" }[m]));
+    }
+
+    function initTabs() {
+      $$(".tab-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.dataset.target;
+          $$(".tab-btn").forEach(b => b.classList.remove("active"));
+          $$(".section").forEach(section => section.classList.remove("active"));
+          btn.classList.add("active");
+          $("#" + id).classList.add("active");
+          window.scrollTo({ top: document.querySelector(".nav-wrap").offsetTop, behavior: "smooth" });
+        });
+      });
+    }
+
+    function init() {
+      initTabs();
+      renderRanks("#armyRanks", armyRanks);
+      renderRanks("#airRanks", airRanks);
+      renderRanks("#navyRanks", navyRanks);
+      renderCards("#armyCards", armyCards);
+      renderCards("#airCards", airCards);
+      renderCards("#navyCards", navyCards);
+      renderCards("#spaceCards", spaceCards);
+      renderCards("#joinCards", joinCards);
+      renderMissiles();
+      renderEquipment();
+      renderQuestions();
+      renderNotes();
+
+      $("#missileSearch").addEventListener("input", renderMissiles);
+      $("#missileFilter").addEventListener("change", renderMissiles);
+      $("#equipmentSearch").addEventListener("input", renderEquipment);
+      $("#equipmentFilter").addEventListener("change", renderEquipment);
+      $("#questionSearch").addEventListener("input", renderQuestions);
+      $("#questionFilter").addEventListener("change", renderQuestions);
+      $("#toggleAnswers").addEventListener("click", () => {
+        revealAnswers = !revealAnswers;
+        $("#toggleAnswers").textContent = revealAnswers ? "Hide Answers" : "Reveal Answers";
+        renderQuestions();
+      });
+      $("#printPaper").addEventListener("click", () => window.print());
+      $("#saveQuestion").addEventListener("click", saveQuestion);
+      $("#saveNote").addEventListener("click", saveNote);
+      $("#clearNotes").addEventListener("click", () => {
+        if (confirm("Clear all saved notes from this browser?")) {
+          localStorage.removeItem("defenceNotes");
+          renderNotes();
+        }
+      });
+    }
+
+    init();
+  </script>
+</body>
+</html>
